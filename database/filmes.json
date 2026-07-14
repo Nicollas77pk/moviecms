@@ -1,1 +1,12 @@
-
+[
+  {
+    "id": 1,
+    "titulo": "Invocação do Mal",
+    "slug": "invocacao-do-mal",
+    "ano": 2013,
+    "genero": "Terror",
+    "diretor": "James Wan",
+    "imagem": "https://via.placeholder.com/300x450",
+    "sinopse": "Um casal de investigadores paranormais ajuda uma família aterrorizada por uma entidade maligna."
+  }
+]
