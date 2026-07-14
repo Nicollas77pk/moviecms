@@ -194,3 +194,24 @@ td{
     background:#2ea043;
 
 }
+.btn-editar{
+
+    background:#0969DA;
+
+    color:white;
+
+    padding:8px 12px;
+
+    border-radius:6px;
+
+    text-decoration:none;
+
+    font-size:14px;
+
+}
+
+.btn-editar:hover{
+
+    background:#0860ca;
+
+}
