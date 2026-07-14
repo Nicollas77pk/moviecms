@@ -1,0 +1,160 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    background:#f3f5f9;
+    display:flex;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+
+    width:240px;
+    height:100vh;
+
+    background:#111827;
+    color:white;
+
+    position:fixed;
+
+}
+
+.logo{
+
+    font-size:28px;
+    font-weight:bold;
+
+    padding:25px;
+
+    border-bottom:1px solid rgba(255,255,255,.08);
+
+}
+
+.menu{
+
+    margin-top:20px;
+
+}
+
+.menu a{
+
+    display:block;
+
+    color:white;
+
+    text-decoration:none;
+
+    padding:16px 25px;
+
+    transition:.3s;
+
+}
+
+.menu a:hover{
+
+    background:#1f2937;
+
+}
+
+/* CONTEÚDO */
+
+.content{
+
+    margin-left:240px;
+
+    width:100%;
+
+    padding:35px;
+
+}
+
+h1{
+
+    margin-bottom:25px;
+
+}
+
+.cards{
+
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:20px;
+
+}
+
+.card{
+
+    background:white;
+
+    padding:25px;
+
+    border-radius:12px;
+
+    box-shadow:0 5px 15px rgba(0,0,0,.05);
+
+}
+
+.card h2{
+
+    font-size:15px;
+
+    color:#666;
+
+}
+
+.numero{
+
+    font-size:42px;
+
+    margin-top:15px;
+
+    font-weight:bold;
+
+}
+
+.tabela{
+
+    margin-top:35px;
+
+    background:white;
+
+    border-radius:12px;
+
+    overflow:hidden;
+
+    box-shadow:0 5px 15px rgba(0,0,0,.05);
+
+}
+
+table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+}
+
+th{
+
+    background:#111827;
+
+    color:white;
+
+    padding:16px;
+
+}
+
+td{
+
+    padding:16px;
+
+    border-bottom:1px solid #eee;
+
+}
