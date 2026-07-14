@@ -202,7 +202,71 @@ alert("Erro ao importar filme");
 
 
 }
-function salvarFilme(){
+async function salvarFilme(){
+
+
+let filme = {
+
+
+titulo: document.getElementById("titulo").value,
+
+ano: document.getElementById("ano").value,
+
+genero: document.getElementById("genero").value,
+
+diretor: document.getElementById("diretor").value,
+
+sinopse: document.getElementById("sinopse").value,
+
+imagem: document.getElementById("imagem").value
+
+
+};
+
+
+
+try{
+
+
+let resposta = await fetch("../salvar-filme.php",{
+
+
+method:"POST",
+
+headers:{
+
+"Content-Type":"application/json"
+
+},
+
+body:JSON.stringify(filme)
+
+
+});
+
+
+
+let resultado = await resposta.json();
+
+
+
+alert(resultado.mensagem);
+
+
+
+}
+catch(erro){
+
+
+console.log(erro);
+
+alert("Erro ao salvar filme");
+
+
+}
+
+
+}
 
 
 let filme = {
