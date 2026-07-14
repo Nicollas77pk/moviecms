@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Novo Filme</title>
+
+<style>
+
+body{
+
+font-family:Arial;
+background:#f5f5f5;
+padding:40px;
+
+}
+
+.card{
+
+background:white;
+padding:25px;
+border-radius:8px;
+max-width:700px;
+margin:auto;
+
+}
+
+input,textarea{
+
+width:100%;
+padding:12px;
+margin-top:8px;
+margin-bottom:18px;
+
+}
+
+button{
+
+padding:12px 20px;
+background:#2563eb;
+color:white;
+border:none;
+cursor:pointer;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="card">
+
+<h1>Novo Filme</h1>
+
+<input id="titulo" placeholder="Título">
+
+<input id="ano" placeholder="Ano">
+
+<textarea id="sinopse" placeholder="Sinopse"></textarea>
+
+<button onclick="salvar()">
+
+Salvar
+
+</button>
+
+</div>
+
+<script>
+
+function salvar(){
+
+alert("Em breve iremos salvar no JSON.");
+
+}
+
+</script>
+
+</body>
+</html>
