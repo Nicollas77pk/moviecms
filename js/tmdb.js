@@ -133,10 +133,72 @@ alert("Erro ao buscar filmes");
 
 
 
-function selecionarFilme(id){
+async function selecionarFilme(id){
 
 
-alert("Filme selecionado ID: "+id);
+let url = `https://api.themoviedb.org/3/movie/${id}?api_key=${TMDB_API_KEY}&language=pt-BR`;
+
+
+
+try{
+
+
+let resposta = await fetch(url);
+
+
+let filme = await resposta.json();
+
+
+
+console.log(filme);
+
+
+
+document.getElementById("titulo").value = filme.title;
+
+
+
+document.getElementById("ano").value = filme.release_date 
+? filme.release_date.substring(0,4)
+: "";
+
+
+
+document.getElementById("sinopse").value = filme.overview;
+
+
+
+document.getElementById("imagem").value = 
+filme.poster_path 
+?
+`https://image.tmdb.org/t/p/w500${filme.poster_path}`
+:
+"";
+
+
+
+let generos = filme.genres.map(genero => genero.name).join(", ");
+
+
+
+document.getElementById("genero").value = generos;
+
+
+
+alert("Filme importado com sucesso!");
+
+
+
+}
+catch(erro){
+
+
+console.log(erro);
+
+alert("Erro ao importar filme");
+
+
+}
 
 
 }
