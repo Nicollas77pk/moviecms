@@ -1,19 +1,39 @@
 fetch('../database/filmes.json')
-    .then(response => response.json())
-    .then(filmes => {
+.then(r => r.json())
+.then(filmes=>{
 
-        const tabela = document.getElementById('filmes');
+let html='';
 
-        filmes.forEach(filme => {
+filmes.forEach(f=>{
 
-            tabela.innerHTML += `
-                <tr>
-                    <td>${filme.id}</td>
-                    <td>${filme.titulo}</td>
-                    <td>${filme.ano}</td>
-                </tr>
-            `;
+html+=`
 
-        });
+<tr>
 
-    });
+<td>${f.id}</td>
+
+<td>${f.titulo}</td>
+
+<td>${f.ano}</td>
+
+<td>
+
+<button>Editar</button>
+
+</td>
+
+</tr>
+
+`;
+
+});
+
+document.getElementById('filmes').innerHTML=html;
+
+});
+
+document.getElementById("novoFilme").onclick=function(){
+
+alert("Em breve teremos o cadastro de filmes!");
+
+};
