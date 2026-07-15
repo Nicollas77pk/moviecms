@@ -1,40 +1,67 @@
-fetch("../database/filmes.json")
-    .then(response => response.json())
-    .then(filmes => {
+document.addEventListener("DOMContentLoaded", carregarDashboard);
 
-        document.getElementById("totalFilmes").textContent = filmes.length;
+function carregarDashboard() {
 
-        let html = "";
+    let filmes = JSON.parse(localStorage.getItem("filmes")) || [];
 
-        filmes.forEach(filme => {
+    // Atualiza o card Total de Filmes
+    document.getElementById("totalFilmes").textContent = filmes.length;
 
-            html += `
-                <tr>
+    // Corpo da tabela
+    let tbody = document.getElementById("filmes");
 
-                    <td>${filme.id}</td>
+    tbody.innerHTML = "";
 
-                    <td>${filme.titulo}</td>
+    filmes.forEach((filme, index) => {
 
-                    <td>${filme.ano}</td>
+        tbody.innerHTML += `
 
-                    <td>
+        <tr>
 
-                        <a href="#" class="btn-editar">
-                            Editar
-                        </a>
+            <td>${index + 1}</td>
 
-                    </td>
+            <td>${filme.titulo}</td>
 
-                </tr>
-            `;
+            <td>${filme.ano}</td>
 
-        });
+            <td>
 
-        document.getElementById("filmes").innerHTML = html;
+                <button onclick="editarFilme(${index})">
+                    Editar
+                </button>
 
-    })
-    .catch(error => {
+                <button onclick="excluirFilme(${index})">
+                    Excluir
+                </button>
 
-        console.error(error);
+            </td>
+
+        </tr>
+
+        `;
 
     });
+
+}
+
+function excluirFilme(index) {
+
+    let filmes = JSON.parse(localStorage.getItem("filmes")) || [];
+
+    if (!confirm("Deseja excluir este filme?")) {
+        return;
+    }
+
+    filmes.splice(index, 1);
+
+    localStorage.setItem("filmes", JSON.stringify(filmes));
+
+    carregarDashboard();
+
+}
+
+function editarFilme(index) {
+
+    alert("A edição será criada na próxima aula.");
+
+}
