@@ -1,67 +1,53 @@
 function criarCard(item, tipo = "movie") {
 
-    const titulo = item.title || item.name;
+    const titulo = item.title || item.name || "Sem título";
 
     const poster = item.poster_path
-        ? CONFIG.IMAGE_POSTER + item.poster_path
-        : "https://via.placeholder.com/342x513";
+        ? `${CONFIG.IMAGE_POSTER}${item.poster_path}`
+        : "https://via.placeholder.com/342x513?text=Sem+Imagem";
 
     const nota = item.vote_average
         ? item.vote_average.toFixed(1)
-        : "-";
-
-    const ano = (
-        item.release_date ||
-        item.first_air_date ||
-        ""
-    ).substring(0,4);
+        : "0.0";
 
     return `
-
-        <div
-            class="card"
-            data-id="${item.id}"
-            data-tipo="${tipo}">
+        <div class="card"
+             data-id="${item.id}"
+             data-tipo="${tipo}">
 
             <img
                 src="${poster}"
-                loading="lazy"
-                alt="${titulo}">
+                alt="${titulo}"
+                loading="lazy">
 
-            <div class="card-overlay">
+            <div class="card-info">
 
-                <div class="card-title">
+                <h3>${titulo}</h3>
 
-                    ${titulo}
-
-                </div>
-
-                <div class="card-meta">
-
-                    <span class="card-rating">
-
-                        ⭐ ${nota}
-
-                    </span>
-
-                    <span>
-
-                        ${ano}
-
-                    </span>
-
-                </div>
-
-                <button class="card-btn">
-
-                    Ver detalhes
-
-                </button>
+                <span class="nota">
+                    ⭐ ${nota}
+                </span>
 
             </div>
 
         </div>
-
     `;
+}
+
+
+
+function renderizarCards(containerId, lista, tipo = "movie") {
+
+    const container = document.getElementById(containerId);
+
+    if (!container) return;
+
+    lista.forEach(item => {
+
+        if (!item.poster_path) return;
+
+        container.innerHTML += criarCard(item, tipo);
+
+    });
 
 }
