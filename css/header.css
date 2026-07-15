@@ -1,1 +1,53 @@
+header{
 
+    position:sticky;
+
+    top:0;
+
+    z-index:999;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:18px 40px;
+
+    background:#111;
+
+    border-bottom:1px solid #222;
+
+}
+
+.logo{
+
+    font-size:30px;
+
+    font-weight:bold;
+
+    color:#00bfa5;
+
+}
+
+nav{
+
+    display:flex;
+
+    gap:30px;
+
+}
+
+nav a{
+
+    color:white;
+
+    transition:.25s;
+
+}
+
+nav a:hover{
+
+    color:#00bfa5;
+
+}
