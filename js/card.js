@@ -1,23 +1,30 @@
+/* ===========================================
+   CRIA UM CARD
+=========================================== */
+
 function criarCard(item, tipo = "movie") {
 
-    const titulo = item.title || item.name;
+    const titulo =
+        item.title ||
+        item.name ||
+        "Sem título";
 
     const poster = item.poster_path
         ? CONFIG.IMAGE_POSTER + item.poster_path
-        : "https://via.placeholder.com/342x513";
+        : "https://via.placeholder.com/342x513?text=Sem+Imagem";
 
     const nota = item.vote_average
         ? item.vote_average.toFixed(1)
-        : "-";
+        : "0.0";
 
     const ano = (
         item.release_date ||
         item.first_air_date ||
         ""
-    ).substring(0,4);
+    ).substring(0, 4);
 
     return `
-
+    
         <div
             class="card"
             data-id="${item.id}"
@@ -25,16 +32,16 @@ function criarCard(item, tipo = "movie") {
 
             <img
                 src="${poster}"
-                loading="lazy"
-                alt="${titulo}">
+                alt="${titulo}"
+                loading="lazy">
 
             <div class="card-overlay">
 
-                <div class="card-title">
+                <h3 class="card-title">
 
                     ${titulo}
 
-                </div>
+                </h3>
 
                 <div class="card-meta">
 
@@ -65,3 +72,54 @@ function criarCard(item, tipo = "movie") {
     `;
 
 }
+
+
+/* ===========================================
+   RENDERIZA OS CARDS
+=========================================== */
+
+function renderizarCards(containerId, lista, tipo = "movie") {
+
+    const container =
+        document.getElementById(containerId);
+
+    if (!container) return;
+
+    container.innerHTML = "";
+
+    lista.forEach(item => {
+
+        if (!item.poster_path) return;
+
+        container.innerHTML += criarCard(item, tipo);
+
+    });
+
+}
+
+
+/* ===========================================
+   EVENTOS DOS CARDS
+=========================================== */
+
+document.addEventListener("click", function (e) {
+
+    const card = e.target.closest(".card");
+
+    if (!card) return;
+
+    const id = card.dataset.id;
+
+    const tipo = card.dataset.tipo;
+
+    if (typeof abrirModal === "function") {
+
+        abrirModal(id, tipo);
+
+    } else {
+
+        console.log("Card clicado:", id, tipo);
+
+    }
+
+});
