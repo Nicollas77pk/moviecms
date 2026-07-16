@@ -23,6 +23,8 @@ document.body.style.overflow="hidden";
     modalMeta.innerHTML = "";
 
     modalProviders.innerHTML = "";
+   
+    modalTrailer.innerHTML = "";
 
     try {
 
@@ -31,6 +33,8 @@ document.body.style.overflow="hidden";
         preencherModal(detalhes, tipo);
 
         await carregarOndeAssistir(id, tipo);
+
+await carregarTrailer(id, tipo);
 
     } catch (erro) {
 
@@ -229,3 +233,94 @@ document.addEventListener("keydown", function(e){
     }
 
 });
+
+
+
+
+
+/* ===========================
+   TRAILER YOUTUBE
+=========================== */
+
+
+async function carregarTrailer(id, tipo){
+
+
+    try{
+
+
+        const dados = await api(`/${tipo}/${id}/videos`);
+
+
+
+        if(!dados.results || dados.results.length === 0){
+
+            return;
+
+        }
+
+
+
+        const trailer = dados.results.find(video =>
+
+            video.site === "YouTube" &&
+
+            video.type === "Trailer"
+
+        );
+
+
+
+        if(!trailer){
+
+            return;
+
+        }
+
+
+
+        modalTrailer.innerHTML = `
+
+
+            <h3>
+
+                🎬 Trailer
+
+            </h3>
+
+
+            <div class="trailer-box">
+
+
+                <iframe
+
+                src="https://www.youtube.com/embed/${trailer.key}"
+
+                title="Trailer"
+
+                frameborder="0"
+
+                allowfullscreen>
+
+                </iframe>
+
+
+            </div>
+
+
+        `;
+
+
+    }catch(error){
+
+
+        console.error(
+            "Erro ao carregar trailer:",
+            error
+        );
+
+
+    }
+
+
+}
