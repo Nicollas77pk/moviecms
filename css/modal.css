@@ -48,26 +48,25 @@
 
     max-height:90vh;
 
-
     background:#111;
 
     border-radius:22px;
 
     overflow:hidden;
 
+    display:flex;
+
+    flex-direction:column;
+
 
     box-shadow:
-
     0 25px 80px rgba(0,0,0,.8);
 
 
     animation:
-
     modalEntrada .35s ease;
 
-
 }
-
 
 
 @keyframes modalEntrada{
@@ -152,20 +151,17 @@ to{
 
 .modal-banner{
 
-
     height:430px;
 
+    flex-shrink:0;
 
     background-size:cover;
 
     background-position:center;
 
-
     position:relative;
 
-
 }
-
 
 
 .modal-banner::after{
@@ -273,12 +269,18 @@ to{
 
 .modal-content{
 
-
     padding:35px;
 
+    overflow-y:auto;
+
+    max-height:45vh;
+
+
+    scrollbar-width:thin;
+
+    scrollbar-color:#00bfa5 #171717;
 
 }
-
 
 
 .modal-content h1{
@@ -448,12 +450,9 @@ to{
 }
 
 
-
 .modal-box{
 
-
     max-height:95vh;
-
 
 }
 
@@ -461,9 +460,7 @@ to{
 
 .modal-banner{
 
-
     height:260px;
-
 
 }
 
@@ -471,9 +468,9 @@ to{
 
 .modal-content{
 
-
     padding:22px;
 
+    max-height:55vh;
 
 }
 
@@ -481,20 +478,50 @@ to{
 
 .modal-content h1{
 
-
     font-size:28px;
 
-
 }
 
-
-.modal-description{
-
-
-    font-size:14px;
 
 
 }
 
+/* ===========================
+   SCROLL MODERNO MODAL
+=========================== */
+
+
+.modal-content::-webkit-scrollbar{
+
+    width:8px;
+
+}
+
+
+
+.modal-content::-webkit-scrollbar-track{
+
+    background:#171717;
+
+    border-radius:20px;
+
+}
+
+
+
+.modal-content::-webkit-scrollbar-thumb{
+
+    background:#00bfa5;
+
+    border-radius:20px;
+
+
+}
+
+
+
+.modal-content::-webkit-scrollbar-thumb:hover{
+
+    background:#00e6c3;
 
 }
