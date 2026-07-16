@@ -2,6 +2,8 @@ document.addEventListener("DOMContentLoaded", iniciarHome);
 
 async function iniciarHome() {
 
+    console.log("HOME INICIOU");
+
     try {
 
         await carregarBanner();
@@ -14,9 +16,9 @@ async function iniciarHome() {
 
         await carregarNovelas();
 
-    } catch (erro) {
+    } catch (e) {
 
-        console.error("Erro ao iniciar Home:", erro);
+        console.error(e);
 
     }
 
