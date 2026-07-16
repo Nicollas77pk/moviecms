@@ -1,96 +1,104 @@
+let paginaAtual = 1;
+
+let carregando = false;
+
+let tipoAtual = "movie";
+
+let endpointAtual = "";
+
+let containerCategoria;
+
+
+
 document.addEventListener("DOMContentLoaded",()=>{
 
 
     const caminho = window.location.pathname;
 
 
-    const container = document.querySelector(".categoria-lista");
+    containerCategoria =
+    document.querySelector(".categoria-lista");
 
 
-    if(!container) return;
-
-
-
-    let tipo = "movie";
-
-    let endpoint = "";
+    if(!containerCategoria) return;
 
 
 
-  if(caminho.includes("filmes")){
+    if(caminho.includes("filmes")){
 
 
-    endpointAtual="/discover/movie";
+        endpointAtual="/discover/movie";
 
-    tipoAtual="movie";
+        tipoAtual="movie";
 
 
-}
-
+    }
 
 
     else if(caminho.includes("series")){
 
 
-        endpoint="/tv/popular";
+        endpointAtual="/discover/tv";
 
-        tipo="tv";
+        tipoAtual="tv";
 
 
     }
-
 
 
     else if(caminho.includes("animes")){
 
 
-        endpoint="/discover/tv?with_genres=16";
+        endpointAtual="/discover/tv?with_genres=16";
 
-        tipo="tv";
+        tipoAtual="tv";
 
 
     }
-
 
 
     else if(caminho.includes("doramas")){
 
 
-        endpoint="/discover/tv?with_origin_country=KR";
+        endpointAtual="/discover/tv?with_origin_country=KR";
 
-        tipo="tv";
+        tipoAtual="tv";
 
 
     }
-
 
 
     else if(caminho.includes("novelas")){
 
 
-        endpoint="/discover/tv?with_genres=18";
+        endpointAtual="/discover/tv?with_genres=18";
 
-        tipo="tv";
+        tipoAtual="tv";
 
 
     }
-
 
 
     else if(caminho.includes("documentarios")){
 
 
-        endpoint="/discover/movie?with_genres=99";
+        endpointAtual="/discover/movie?with_genres=99";
 
-        tipo="movie";
+        tipoAtual="movie";
 
 
     }
 
 
 
-    carregarCategoria(endpoint,tipo,container);
+    carregarCategoria();
 
+
+
+    window.addEventListener(
+        "scroll",
+        verificarScroll
+    );
 
 
 });
@@ -99,25 +107,45 @@ document.addEventListener("DOMContentLoaded",()=>{
 
 
 
-async function carregarCategoria(endpoint,tipo,container){
+async function carregarCategoria(){
+
+
+    if(carregando) return;
+
+
+    carregando=true;
+
 
 
     try{
 
 
-        const dados = await api(endpoint);
+        const dados = await api(
+
+            `${endpointAtual}&language=pt-BR&sort_by=popularity.desc&page=${paginaAtual}`
+
+        );
+
+
+
+        const lista = dados.results.slice(0,10);
 
 
 
         renderizarCards(
 
-            container.id,
+            containerCategoria.id,
 
-            dados.results,
+            lista,
 
-            tipo
+            tipoAtual
 
         );
+
+
+
+        paginaAtual++;
+
 
 
     }
@@ -130,6 +158,39 @@ async function carregarCategoria(endpoint,tipo,container){
             "Erro categoria:",
             error
         );
+
+
+    }
+
+
+
+    carregando=false;
+
+
+}
+
+
+
+
+
+
+function verificarScroll(){
+
+
+    const chegouNoFinal =
+
+    window.innerHeight +
+
+    window.scrollY >=
+
+    document.body.offsetHeight - 500;
+
+
+
+    if(chegouNoFinal){
+
+
+        carregarCategoria();
 
 
     }
