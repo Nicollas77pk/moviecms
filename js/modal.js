@@ -135,7 +135,11 @@ async function carregarOndeAssistir(id, tipo) {
 
             lista.innerHTML += `
 
-                <div class="provider">
+                <a
+class="provider"
+href="${br.link}"
+target="_blank"
+rel="noopener">
 
                     <img
                         src="https://image.tmdb.org/t/p/w92${provider.logo_path}"
