@@ -65,8 +65,15 @@ function iniciarBusca() {
 
     if (!texto) return;
 
+    const estaEmPaginas =
+        window.location.pathname.includes("/paginas/");
+
+    const destino = estaEmPaginas
+        ? "busca.html"
+        : "paginas/busca.html";
+
     window.location.href =
-        `busca.html?q=${encodeURIComponent(texto)}`;
+        `${destino}?q=${encodeURIComponent(texto)}`;
 
 }
 
