@@ -163,27 +163,40 @@ rel="noopener">
 
     if (br.link) {
 
-        modalProviders.innerHTML += `
+       modalProviders.innerHTML += `
 
-            <p style="margin-top:20px">
+<div class="streaming-oferta">
 
-                <a
-                    href="${br.link}"
-                    target="_blank"
-                    class="assistir-btn">
+    <h3>
 
-                    Ver opções oficiais
+        💡 Quer vários streamings pagando o preço de um?
 
-                </a>
+    </h3>
 
-            </p>
 
-        `;
+    <p>
 
-    }
+        Tenha acesso a diversas plataformas em um único plano.
 
+    </p>
+
+
+    <a
+
+        href="https://wa.me/5521994414427?text=Olá!%20Vi%20no%20MultiTela%20a%20opção%20%22Quer%20vários%20streamings%20pagando%20o%20preço%20de%20um%3F%22%20e%20gostaria%20de%20saber%20mais."
+
+        target="_blank"
+
+        class="streaming-btn">
+
+        Saiba mais
+
+    </a>
+
+</div>
+
+`;
 }
-
 /* ===========================
    FECHAR MODAL
 =========================== */
