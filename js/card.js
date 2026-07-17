@@ -80,18 +80,38 @@ function criarCard(item, tipo = "movie") {
 
 function renderizarCards(containerId, lista, tipo = "movie") {
 
-    const container =
-        document.getElementById(containerId);
+    const container = document.getElementById(containerId);
 
     if (!container) return;
 
-    container.innerHTML = "";
+    let html = "";
 
     lista.forEach(item => {
 
         if (!item.poster_path) return;
 
-        container.innerHTML += criarCard(item, tipo);
+        html += criarCard(item, tipo);
+
+    });
+
+    // Adiciona os novos cards sem apagar os antigos
+    container.insertAdjacentHTML("beforeend", html);
+
+    // Ativa o clique dos novos cards
+    container.querySelectorAll(".card").forEach(card => {
+
+        if (card.dataset.evento) return;
+
+        card.dataset.evento = "1";
+
+        card.addEventListener("click", () => {
+
+            abrirModal(
+                card.dataset.id,
+                card.dataset.tipo
+            );
+
+        });
 
     });
 
