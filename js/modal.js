@@ -7,19 +7,25 @@ const modalTrailer = document.getElementById("modalTrailer");
 const modalProviders = document.getElementById("modalProviders");
 const fecharModal = document.getElementById("fecharModal");
 
+
 /* ===========================
    ABRIR MODAL
 =========================== */
 
 async function abrirModal(id, tipo = "movie") {
 
-   console.log(id);
 
-console.log(tipo);
-   
-   modal.classList.add("ativo");
+    console.log("ID:", id);
+    console.log("TIPO:", tipo);
 
-document.body.style.overflow="hidden";
+
+    if(!modal) return;
+
+
+    modal.classList.add("ativo");
+
+    document.body.style.overflow = "hidden";
+
 
     modalTitulo.innerHTML = "Carregando...";
 
@@ -28,175 +34,530 @@ document.body.style.overflow="hidden";
     modalMeta.innerHTML = "";
 
     modalProviders.innerHTML = "";
-   
-    modalTrailer.innerHTML = "";
 
-    try {
 
-        const detalhes = await api(`/${tipo}/${id}`);
+    if(modalTrailer){
 
-        preencherModal(detalhes, tipo);
-
-        await carregarOndeAssistir(id, tipo);
-
-await carregarTrailer(id, tipo);
-
-    } catch (erro) {
-
-        console.error(erro);
-
-        modalTitulo.innerHTML = "Erro ao carregar";
+        modalTrailer.innerHTML = "";
 
     }
 
+
+
+    try {
+
+
+        const detalhes = await api(`/${tipo}/${id}`);
+
+
+        preencherModal(
+            detalhes,
+            tipo
+        );
+
+
+        await carregarTrailer(
+            id,
+            tipo
+        );
+
+
+        await carregarOndeAssistir(
+            id,
+            tipo
+        );
+
+
+
+    } catch(error){
+
+
+        console.error(
+            "Erro modal:",
+            error
+        );
+
+
+        modalTitulo.innerHTML =
+        "Erro ao carregar conteúdo";
+
+
+    }
+
+
 }
+
+
+
+
 
 /* ===========================
    PREENCHER MODAL
 =========================== */
 
-function preencherModal(item, tipo) {
 
-    modalBanner.style.backgroundImage =
-        `url(${CONFIG.IMAGE_BACKDROP}${item.backdrop_path})`;
+function preencherModal(item,tipo){
+
+
+    if(modalBanner){
+
+
+        modalBanner.style.backgroundImage =
+
+        item.backdrop_path
+
+        ?
+
+        `url(${CONFIG.IMAGE_BACKDROP}${item.backdrop_path})`
+
+        :
+
+        "none";
+
+
+    }
+
+
 
     modalTitulo.innerHTML =
-        item.title || item.name;
+
+    item.title ||
+
+    item.name ||
+
+    "Sem título";
+
+
+
 
     const ano = (
+
         item.release_date ||
+
         item.first_air_date ||
+
         ""
-    ).substring(0, 4);
+
+    ).substring(0,4);
+
+
+
 
     const nota = item.vote_average
-        ? item.vote_average.toFixed(1)
-        : "-";
+
+    ?
+
+    item.vote_average.toFixed(1)
+
+    :
+
+    "-";
+
+
+
+
 
     const duracao = item.runtime
-        ? item.runtime + " min"
-        : "";
+
+    ?
+
+    item.runtime + " min"
+
+    :
+
+    "";
+
+
+
+
 
     const generos = item.genres
-        .map(g => g.name)
-        .join(" • ");
+
+    ?
+
+    item.genres
+
+    .map(g=>g.name)
+
+    .join(" • ")
+
+    :
+
+    "";
+
+
+
+
 
     modalMeta.innerHTML = `
 
+
         ⭐ ${nota}
 
-        &nbsp;&nbsp;|&nbsp;&nbsp;
+        ${ano ? " | " + ano : ""}
 
-        ${ano}
+        ${duracao ? " | " + duracao : ""}
 
-        ${duracao ? "&nbsp;&nbsp;|&nbsp;&nbsp;" + duracao : ""}
+        ${generos ? " | " + generos : ""}
 
-        ${generos ? "&nbsp;&nbsp;|&nbsp;&nbsp;" + generos : ""}
 
     `;
 
+
+
+
     modalDescricao.innerHTML =
-        item.overview || "Sinopse não disponível.";
+
+    item.overview ||
+
+    "Sinopse não disponível.";
+
+
 
 }
+
+
+
+
 
 /* ===========================
    ONDE ASSISTIR
 =========================== */
 
-async function carregarOndeAssistir(id, tipo) {
 
-    const dados = await api(`/${tipo}/${id}/watch/providers`);
+async function carregarOndeAssistir(id,tipo){
 
-    modalProviders.innerHTML = "<h3>Onde assistir</h3>";
 
-    if (
-        !dados.results ||
-        !dados.results.BR
-    ) {
+    try{
 
-        modalProviders.innerHTML +=
 
-            "<p>Não encontramos plataformas disponíveis para o Brasil.</p>";
+        const dados = await api(
 
-        return;
+            `/${tipo}/${id}/watch/providers`
 
-    }
+        );
 
-    const br = dados.results.BR;
 
-    if (br.flatrate) {
 
-        const lista = document.createElement("div");
+        modalProviders.innerHTML =
 
-        lista.className = "providers";
+        "<h3>Onde assistir</h3>";
 
-        br.flatrate.forEach(provider => {
 
-            lista.innerHTML += `
 
-                <a
-class="provider"
-href="${br.link}"
-target="_blank"
-rel="noopener">
 
-                    <img
-                        src="https://image.tmdb.org/t/p/w92${provider.logo_path}"
-                        alt="${provider.provider_name}">
+        if(
 
-                    <span>
+            !dados.results ||
 
-                        ${provider.provider_name}
+            !dados.results.BR
 
-                    </span>
+        ){
 
-                </div>
+
+            modalProviders.innerHTML +=
+
+            `
+
+            <p>
+
+            Não encontramos plataformas disponíveis para o Brasil.
+
+            </p>
 
             `;
 
-        });
 
-        modalProviders.appendChild(lista);
+            adicionarOferta();
+
+            return;
+
+
+        }
+
+
+
+
+        const br = dados.results.BR;
+
+
+
+        if(br.flatrate){
+
+
+
+            const lista = document.createElement("div");
+
+
+            lista.className = "providers";
+
+
+
+
+            br.flatrate.forEach(provider=>{
+
+
+
+                lista.innerHTML += `
+
+
+                <a
+
+                    class="provider"
+
+                    href="${br.link || '#'}"
+
+                    target="_blank"
+
+                    rel="noopener">
+
+
+                    <img
+
+                    src="https://image.tmdb.org/t/p/w92${provider.logo_path}"
+
+                    alt="${provider.provider_name}">
+
+
+                    <span>
+
+                    ${provider.provider_name}
+
+                    </span>
+
+
+
+                </a>
+
+
+                `;
+
+
+
+            });
+
+
+
+            modalProviders.appendChild(lista);
+
+
+
+        }
+
+
+
+        adicionarOferta();
+
+
+
 
     }
 
-    if (br.link) {
+    catch(error){
 
-       modalProviders.innerHTML += `
+
+        console.error(
+
+            "Erro providers:",
+
+            error
+
+        );
+
+
+    }
+
+
+}
+
+
+
+
+
+
+
+/* ===========================
+   OFERTA WHATSAPP
+=========================== */
+
+
+function adicionarOferta(){
+
+
+modalProviders.innerHTML += `
+
 
 <div class="streaming-oferta">
 
-    <h3>
 
-        💡 Quer vários streamings pagando o preço de um?
+<h3>
 
-    </h3>
+💡 Quer vários streamings pagando o preço de um?
 
-
-    <p>
-
-        Tenha acesso a diversas plataformas em um único plano.
-
-    </p>
+</h3>
 
 
-    <a
 
-        href="https://wa.me/5521994414427?text=Olá!%20Vi%20no%20MultiTela%20a%20opção%20%22Quer%20vários%20streamings%20pagando%20o%20preço%20de%20um%3F%22%20e%20gostaria%20de%20saber%20mais."
+<p>
 
-        target="_blank"
+Tenha acesso a diversas plataformas em um único plano.
 
-        class="streaming-btn">
+</p>
 
-        Saiba mais
 
-    </a>
+
+<a
+
+href="https://wa.me/5521994414427?text=Olá!%20Vi%20no%20MultiTela%20a%20opção%20de%20streamings%20e%20gostaria%20de%20saber%20mais."
+
+target="_blank"
+
+class="streaming-btn">
+
+
+Saiba mais
+
+
+</a>
+
 
 </div>
 
+
 `;
+
 }
+
+
+
+
+
+/* ===========================
+   TRAILER
+=========================== */
+
+
+async function carregarTrailer(id,tipo){
+
+
+
+try{
+
+
+const dados = await api(
+
+`/${tipo}/${id}/videos`
+
+);
+
+
+
+
+if(
+
+!dados.results ||
+
+dados.results.length === 0 ||
+
+!modalTrailer
+
+){
+
+return;
+
+}
+
+
+
+
+
+const trailer = dados.results.find(video=>
+
+
+video.site === "YouTube"
+
+&&
+
+video.type === "Trailer"
+
+
+);
+
+
+
+
+if(!trailer){
+
+return;
+
+}
+
+
+
+
+
+modalTrailer.innerHTML = `
+
+
+<h3>
+
+🎬 Trailer
+
+</h3>
+
+
+
+<div class="trailer-box">
+
+
+<iframe
+
+src="https://www.youtube.com/embed/${trailer.key}"
+
+title="Trailer"
+
+frameborder="0"
+
+allowfullscreen>
+
+
+</iframe>
+
+
+
+</div>
+
+
+`;
+
+
+
+
+
+}
+
+catch(error){
+
+
+console.error(
+
+"Erro trailer:",
+
+error
+
+);
+
+
+}
+
+
+
+}
+
+
+
+
+
 /* ===========================
    FECHAR MODAL
 =========================== */
@@ -204,13 +565,17 @@ rel="noopener">
 
 function fecharModalFuncao(){
 
-    if(modal){
 
-        modal.classList.remove("ativo");
+if(!modal) return;
 
-        document.body.style.overflow = "";
 
-    }
+
+modal.classList.remove("ativo");
+
+
+document.body.style.overflow = "";
+
+
 
 }
 
@@ -218,131 +583,79 @@ function fecharModalFuncao(){
 
 if(fecharModal){
 
-    fecharModal.addEventListener("click", function(e){
 
-        e.stopPropagation();
+fecharModal.addEventListener(
 
-        fecharModalFuncao();
+"click",
 
-    });
+(e)=>{
+
+
+e.stopPropagation();
+
+
+fecharModalFuncao();
+
 
 }
+
+
+);
+
+
+}
+
 
 
 
 if(modal){
 
-    modal.addEventListener("click", function(e){
 
-        if(e.target === modal){
+modal.addEventListener(
 
-            fecharModalFuncao();
+"click",
 
-        }
+(e)=>{
 
-    });
+
+if(e.target === modal){
+
+
+fecharModalFuncao();
+
+
+}
+
+
+}
+
+
+);
+
 
 }
 
 
 
-document.addEventListener("keydown", function(e){
-
-    if(e.key === "Escape"){
-
-        fecharModalFuncao();
-
-    }
-
-});
 
 
+document.addEventListener(
+
+"keydown",
+
+(e)=>{
 
 
-
-/* ===========================
-   TRAILER YOUTUBE
-=========================== */
+if(e.key === "Escape"){
 
 
-async function carregarTrailer(id, tipo){
-
-
-    try{
-
-
-        const dados = await api(`/${tipo}/${id}/videos`);
-
-
-
-        if(!dados.results || dados.results.length === 0){
-
-            return;
-
-        }
-
-
-
-        const trailer = dados.results.find(video =>
-
-            video.site === "YouTube" &&
-
-            video.type === "Trailer"
-
-        );
-
-
-
-        if(!trailer){
-
-            return;
-
-        }
-
-
-
-        modalTrailer.innerHTML = `
-
-
-            <h3>
-
-                🎬 Trailer
-
-            </h3>
-
-
-            <div class="trailer-box">
-
-
-                <iframe
-
-                src="https://www.youtube.com/embed/${trailer.key}"
-
-                title="Trailer"
-
-                frameborder="0"
-
-                allowfullscreen>
-
-                </iframe>
-
-
-            </div>
-
-
-        `;
-
-
-    }catch(error){
-
-
-        console.error(
-            "Erro ao carregar trailer:",
-            error
-        );
-
-
-    }
+fecharModalFuncao();
 
 
 }
+
+
+}
+
+
+);
