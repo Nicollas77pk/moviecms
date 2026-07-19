@@ -1,661 +1,175 @@
-const modal = document.getElementById("modal");
-const modalBanner = document.getElementById("modalBanner");
-const modalTitulo = document.getElementById("modalTitulo");
-const modalMeta = document.getElementById("modalMeta");
-const modalDescricao = document.getElementById("modalDescricao");
-const modalTrailer = document.getElementById("modalTrailer");
-const modalProviders = document.getElementById("modalProviders");
-const fecharModal = document.getElementById("fecharModal");
-
-
 /* ===========================
-   ABRIR MODAL
+   BIBLIOTECA DE LINKS
 =========================== */
 
-async function abrirModal(id, tipo = "movie") {
+const LINK_PROVIDERS = {
 
+    "Netflix": "https://www.netflix.com/search?q=",
 
-    console.log("ID:", id);
-    console.log("TIPO:", tipo);
+    "Amazon Prime Video": "https://www.primevideo.com/search/ref=atv_nb_sr?phrase=",
 
+    "Prime Video": "https://www.primevideo.com/search/ref=atv_nb_sr?phrase=",
 
-    if(!modal) return;
+    "Disney+": "https://www.disneyplus.com/pt-br/search?q=",
 
+    "Disney Plus": "https://www.disneyplus.com/pt-br/search?q=",
 
-    modal.classList.add("ativo");
+    "Max": "https://play.max.com/search?q=",
 
-    document.body.style.overflow = "hidden";
+    "HBO Max": "https://play.max.com/search?q=",
 
+    "Globoplay": "https://globoplay.globo.com/busca/?q=",
 
-    modalTitulo.innerHTML = "Carregando...";
+    "Paramount+": "https://www.paramountplus.com/search/?q=",
 
-    modalDescricao.innerHTML = "";
+    "Paramount Plus": "https://www.paramountplus.com/search/?q=",
 
-    modalMeta.innerHTML = "";
+    "Apple TV+": "https://tv.apple.com/search?q=",
 
-    modalProviders.innerHTML = "";
+    "Apple TV Plus": "https://tv.apple.com/search?q=",
 
+    "Crunchyroll": "https://www.crunchyroll.com/search?q=",
 
-    if(modalTrailer){
+    "Looke": "https://www.looke.com.br/search?q=",
 
-        modalTrailer.innerHTML = "";
+    "MUBI": "https://mubi.com/pt/search?query=",
 
-    }
+    "Telecine": "https://www.telecine.com.br/busca?q=",
 
+    "Claro tv+": "https://www.claro.com.br/claro-tv-plus",
 
+    "Claro Video": "https://www.clarovideo.com/",
 
-    try {
+    "Pluto TV": "https://pluto.tv/",
 
+    "Mercado Play": "https://www.mercadoplay.com.br/",
 
-        const detalhes = await api(`/${tipo}/${id}`);
+    "Plex": "https://watch.plex.tv/search?q=",
 
+    "YouTube": "https://www.youtube.com/results?search_query=",
 
-        preencherModal(
-            detalhes,
-            tipo
-        );
+    "Google Play Movies": "https://play.google.com/store/search?q=",
 
+    "Google Play": "https://play.google.com/store/search?q="
 
-        await carregarTrailer(
-            id,
-            tipo
-        );
-
-
-        await carregarOndeAssistir(
-            id,
-            tipo
-        );
-
-
-
-    } catch(error){
-
-
-        console.error(
-            "Erro modal:",
-            error
-        );
-
-
-        modalTitulo.innerHTML =
-        "Erro ao carregar conteúdo";
-
-
-    }
-
-
-}
-
-
-
-
-
-/* ===========================
-   PREENCHER MODAL
-=========================== */
-
-
-function preencherModal(item,tipo){
-
-
-    if(modalBanner){
-
-
-        modalBanner.style.backgroundImage =
-
-        item.backdrop_path
-
-        ?
-
-        `url(${CONFIG.IMAGE_BACKDROP}${item.backdrop_path})`
-
-        :
-
-        "none";
-
-
-    }
-
-
-
-    modalTitulo.innerHTML =
-
-    item.title ||
-
-    item.name ||
-
-    "Sem título";
-
-
-
-
-    const ano = (
-
-        item.release_date ||
-
-        item.first_air_date ||
-
-        ""
-
-    ).substring(0,4);
-
-
-
-
-    const nota = item.vote_average
-
-    ?
-
-    item.vote_average.toFixed(1)
-
-    :
-
-    "-";
-
-
-
-
-
-    const duracao = item.runtime
-
-    ?
-
-    item.runtime + " min"
-
-    :
-
-    "";
-
-
-
-
-
-    const generos = item.genres
-
-    ?
-
-    item.genres
-
-    .map(g=>g.name)
-
-    .join(" • ")
-
-    :
-
-    "";
-
-
-
-
-
-    modalMeta.innerHTML = `
-
-
-        ⭐ ${nota}
-
-        ${ano ? " | " + ano : ""}
-
-        ${duracao ? " | " + duracao : ""}
-
-        ${generos ? " | " + generos : ""}
-
-
-    `;
-
-
-
-
-    modalDescricao.innerHTML =
-
-    item.overview ||
-
-    "Sinopse não disponível.";
-
-
-
-}
-
-
-
+};
 
 
 /* ===========================
    ONDE ASSISTIR
 =========================== */
 
+async function carregarOndeAssistir(id, tipo) {
 
-async function carregarOndeAssistir(id,tipo){
+    const detalhes = await api(`/${tipo}/${id}`);
 
+    const titulo = detalhes.title || detalhes.name;
 
-    try{
+    const busca = encodeURIComponent(titulo);
 
+    const dados = await api(`/${tipo}/${id}/watch/providers`);
 
-        const dados = await api(
+    modalProviders.innerHTML = "<h3>Onde assistir</h3>";
 
-            `/${tipo}/${id}/watch/providers`
+    if (!dados.results || !dados.results.BR) {
 
-        );
+        modalProviders.innerHTML +=
+            "<p>Não encontramos plataformas disponíveis para o Brasil.</p>";
 
+        return;
 
+    }
 
-        modalProviders.innerHTML =
+    const br = dados.results.BR;
 
-        "<h3>Onde assistir</h3>";
+    let providers = [];
 
+    if (br.flatrate) providers.push(...br.flatrate);
 
+    if (br.buy) providers.push(...br.buy);
 
+    if (br.rent) providers.push(...br.rent);
 
-        if(
+    /* Remove repetidos */
 
-            !dados.results ||
+    providers = providers.filter((provider, index, self) =>
 
-            !dados.results.BR
+        index === self.findIndex(p => p.provider_id === provider.provider_id)
 
-        ){
+    );
 
+    const lista = document.createElement("div");
 
-            modalProviders.innerHTML +=
+    lista.className = "providers";
 
-            `
+    providers.forEach(provider => {
 
-            <p>
+        const nome = provider.provider_name;
 
-            Não encontramos plataformas disponíveis para o Brasil.
+        const link = LINK_PROVIDERS[nome]
 
-            </p>
+            ? LINK_PROVIDERS[nome] + busca
 
-            `;
+            : br.link;
 
+        lista.innerHTML += `
 
-            adicionarOferta();
+            <a
+                class="provider"
+                href="${link}"
+                target="_blank"
+                rel="noopener">
 
-            return;
-
-
-        }
-
-
-
-
-        const br = dados.results.BR;
-
-
-
-        if(br.flatrate){
-
-
-
-            const lista = document.createElement("div");
-
-
-            lista.className = "providers";
-
-
-
-
-            br.flatrate.forEach(provider=>{
-
-
-
-                lista.innerHTML += `
-
-
-                <a
-
-                    class="provider"
-
-                    href="${br.link || '#'}"
-
-                    target="_blank"
-
-                    rel="noopener">
-
-
-                    <img
-
+                <img
                     src="https://image.tmdb.org/t/p/w92${provider.logo_path}"
+                    alt="${nome}">
 
-                    alt="${provider.provider_name}">
+                <span>
 
+                    ${nome}
 
-                    <span>
+                </span>
 
-                    ${provider.provider_name}
+            </a>
 
-                    </span>
+        `;
 
+    });
 
+    modalProviders.appendChild(lista);
 
-                </a>
+    /* Oferta */
 
-
-                `;
-
-
-
-            });
-
-
-
-            modalProviders.appendChild(lista);
-
-
-
-        }
-
-
-
-        adicionarOferta();
-
-
-
-
-    }
-
-    catch(error){
-
-
-        console.error(
-
-            "Erro providers:",
-
-            error
-
-        );
-
-
-    }
-
-
-}
-
-
-
-
-
-
-
-/* ===========================
-   OFERTA WHATSAPP
-=========================== */
-
-
-function adicionarOferta(){
-
-
-modalProviders.innerHTML += `
-
+    modalProviders.innerHTML += `
 
 <div class="streaming-oferta">
 
+    <h3>
 
-<h3>
+        💡 Quer vários streamings pagando o preço de um?
 
-💡 Quer vários streamings pagando o preço de um?
+    </h3>
 
-</h3>
+    <p>
 
+        Tenha acesso a diversas plataformas em um único plano.
 
+    </p>
 
-<p>
+    <a
 
-Tenha acesso a diversas plataformas em um único plano.
+        href="https://wa.me/5521994414427?text=Olá!%20Vi%20no%20MultiTela%20e%20gostaria%20de%20saber%20mais."
 
-</p>
+        target="_blank"
 
+        class="streaming-btn">
 
+        Saiba mais
 
-<a
-
-href="https://wa.me/5521994414427?text=Olá!%20Vi%20no%20MultiTela%20a%20opção%20de%20streamings%20e%20gostaria%20de%20saber%20mais."
-
-target="_blank"
-
-class="streaming-btn">
-
-
-Saiba mais
-
-
-</a>
-
+    </a>
 
 </div>
-
 
 `;
 
 }
-
-
-
-
-
-/* ===========================
-   TRAILER
-=========================== */
-
-
-async function carregarTrailer(id,tipo){
-
-
-
-try{
-
-
-const dados = await api(
-
-`/${tipo}/${id}/videos`
-
-);
-
-
-
-
-if(
-
-!dados.results ||
-
-dados.results.length === 0 ||
-
-!modalTrailer
-
-){
-
-return;
-
-}
-
-
-
-
-
-const trailer = dados.results.find(video=>
-
-
-video.site === "YouTube"
-
-&&
-
-video.type === "Trailer"
-
-
-);
-
-
-
-
-if(!trailer){
-
-return;
-
-}
-
-
-
-
-
-modalTrailer.innerHTML = `
-
-
-<h3>
-
-🎬 Trailer
-
-</h3>
-
-
-
-<div class="trailer-box">
-
-
-<iframe
-
-src="https://www.youtube.com/embed/${trailer.key}"
-
-title="Trailer"
-
-frameborder="0"
-
-allowfullscreen>
-
-
-</iframe>
-
-
-
-</div>
-
-
-`;
-
-
-
-
-
-}
-
-catch(error){
-
-
-console.error(
-
-"Erro trailer:",
-
-error
-
-);
-
-
-}
-
-
-
-}
-
-
-
-
-
-/* ===========================
-   FECHAR MODAL
-=========================== */
-
-
-function fecharModalFuncao(){
-
-
-if(!modal) return;
-
-
-
-modal.classList.remove("ativo");
-
-
-document.body.style.overflow = "";
-
-
-
-}
-
-
-
-if(fecharModal){
-
-
-fecharModal.addEventListener(
-
-"click",
-
-(e)=>{
-
-
-e.stopPropagation();
-
-
-fecharModalFuncao();
-
-
-}
-
-
-);
-
-
-}
-
-
-
-
-if(modal){
-
-
-modal.addEventListener(
-
-"click",
-
-(e)=>{
-
-
-if(e.target === modal){
-
-
-fecharModalFuncao();
-
-
-}
-
-
-}
-
-
-);
-
-
-}
-
-
-
-
-
-document.addEventListener(
-
-"keydown",
-
-(e)=>{
-
-
-if(e.key === "Escape"){
-
-
-fecharModalFuncao();
-
-
-}
-
-
-}
-
-
-);
