@@ -36,90 +36,101 @@ content="Filmes online, descubra onde assistir seus filmes favoritos.">
 
 <!-- HEADER -->
 
-<header class="header">
+ <header class="header">
 
-<div class="container">
+    <div class="container">
 
+        <!-- LOGO -->
 
-<a href="../index.html" class="logo">
+        <a href="/multitela/index.html" class="logo">
 
-MultiTela
+            <img
+                src="https://i.ibb.co/WNFtHNkP/Design-sem-nome-removebg-preview.png"
+                alt="MultiTela">
 
-</a>
+        </a>
 
+        <!-- MENU MOBILE -->
 
+        <button
+            class="menu-toggle"
+            id="menuToggle">
 
-<nav class="menu">
+            ☰
 
+        </button>
 
-<a href="filmes.html">
+        <!-- MENU -->
 
-Filmes
+        <nav
+            class="menu"
+            id="menu">
 
-</a>
+            <a href="/multitela/paginas/filmes.html">
 
+                Filmes
 
-<a href="series.html">
+            </a>
 
-Séries
+            <a href="/multitela/paginas/series.html">
 
-</a>
+                Séries
 
+            </a>
 
-<a href="animes.html">
+            <a href="/multitela/paginas/animes.html">
 
-Animes
+                Animes
 
-</a>
+            </a>
 
+            <a href="/multitela/paginas/doramas.html">
 
-<a href="doramas.html">
+                Doramas
 
-Doramas
+            </a>
 
-</a>
+            <a href="/multitela/paginas/novelas.html">
 
+                Novelas
 
-<a href="novelas.html">
+            </a>
 
-Novelas
+            <a href="/multitela/paginas/documentarios.html">
 
-</a>
+                Documentários
 
+            </a>
 
-<a href="documentarios.html">
+        </nav>
 
-Documentários
+        <!-- BUSCA -->
 
-</a>
+        <div class="header-search">
 
+            <input
 
-</nav>
+                id="campoBusca"
 
+                type="search"
 
+                autocomplete="off"
 
-<div class="header-right">
+                placeholder="Buscar filmes, séries, animes...">
 
+            <button
 
-<input
-id="campoBusca"
-type="text"
-placeholder="Buscar filmes ou séries...">
+                id="btnBusca">
 
+                🔍
 
+            </button>
 
-<button id="btnBusca">
+            <div id="autocompleteBusca"></div>
 
-🔍
+        </div>
 
-</button>
-
-
-
-</div>
-
-
-</div>
+    </div>
 
 </header>
 
