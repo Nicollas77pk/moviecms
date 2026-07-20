@@ -84,6 +84,9 @@ a{
     background-position:center;
 
 }
+transition:opacity .5s ease;
+
+}
 
 .hero-overlay{
 
