@@ -8,15 +8,7 @@
 
     top:0;
 
-    left:0;
-
-    width:100%;
-
-    z-index:9999;
-
-    background:#0d0d0d;
-
-    border-bottom:1px solid #1d1d1d;
+    z-index:100000;
 
 }
 
@@ -64,13 +56,45 @@
 
 .menu{
 
+    position:fixed;
+
+    top:78px;
+
+    left:0;
+
+    right:0;
+
+    width:100%;
+
+    background:#111;
+
     display:flex;
 
-    align-items:center;
+    flex-direction:column;
 
-    gap:22px;
+    align-items:flex-start;
 
-    margin-left:20px;
+    gap:0;
+
+    margin:0;
+
+    padding:0;
+
+    overflow:hidden;
+
+    max-height:0;
+
+    transition:max-height .35s ease;
+
+    z-index:99999;
+
+    box-shadow:0 15px 40px rgba(0,0,0,.6);
+
+}
+
+.menu.ativo{
+
+    max-height:100vh;
 
 }
 
