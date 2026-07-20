@@ -209,20 +209,35 @@
 
     display:none;
 
-    background:none;
+    width:46px;
+
+    height:46px;
 
     border:none;
 
-    color:white;
+    border-radius:12px;
 
-    font-size:34px;
+    background:#1b1b1b;
+
+    color:#fff;
+
+    font-size:28px;
 
     cursor:pointer;
 
-    margin-left:auto;
+    transition:.3s;
+
+    align-items:center;
+
+    justify-content:center;
 
 }
 
+.menu-toggle:hover{
+
+    background:#009687;
+
+}
 /* ==========================================
    TABLET
 ========================================== */
