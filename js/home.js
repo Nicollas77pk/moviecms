@@ -6,6 +6,11 @@ document.addEventListener("DOMContentLoaded", iniciarHome);
 
 let heroId = null;
 let heroTipo = "movie";
+let banners = [];
+
+let bannerAtual = 0;
+
+const TEMPO_BANNER = 10000; // altere para 180000 se quiser 3 minutos
 
 /* ==========================================
    INICIAR
@@ -47,65 +52,100 @@ async function carregarBanner(){
 
     const dados = await api("/trending/all/day");
 
-    if(!dados.results || !dados.results.length) return;
+    if(!dados.results) return;
 
-    const destaque = dados.results.find(item => item.backdrop_path);
+    banners = dados.results.filter(item => item.backdrop_path);
 
-    if(!destaque) return;
+    if(!banners.length) return;
+
+    bannerAtual = 0;
+
+    mostrarBanner();
+
+    setInterval(() => {
+
+        bannerAtual++;
+
+        if(bannerAtual >= banners.length){
+
+            bannerAtual = 0;
+
+        }
+
+        mostrarBanner();
+
+    }, TEMPO_BANNER);
+
+}
+
+async function mostrarBanner(){
+
+    const destaque = banners[bannerAtual];
 
     heroId = destaque.id;
 
     heroTipo = destaque.media_type === "tv"
+
         ? "tv"
+
         : "movie";
 
     const hero = document.getElementById("hero");
 
-    hero.style.backgroundImage =
+    hero.style.opacity = "0";
 
-        `url(${CONFIG.IMAGE_BACKDROP}${destaque.backdrop_path})`;
+    setTimeout(async ()=>{
 
-    document.getElementById("hero-title").textContent =
+        hero.style.backgroundImage =
 
-        destaque.title || destaque.name;
+            `url(${CONFIG.IMAGE_BACKDROP}${destaque.backdrop_path})`;
 
-    document.getElementById("hero-description").textContent =
+        document.getElementById("hero-title").textContent =
 
-        destaque.overview || "";
+            destaque.title || destaque.name;
 
-    /* Ano */
+        document.getElementById("hero-description").textContent =
 
-    document.getElementById("hero-ano").textContent =
+            destaque.overview || "";
 
-        (destaque.release_date ||
+        document.getElementById("hero-ano").textContent =
 
-        destaque.first_air_date ||
+            (destaque.release_date ||
 
-        "").substring(0,4);
+            destaque.first_air_date ||
 
-    /* Nota */
+            "").substring(0,4);
 
-    document.getElementById("hero-nota").textContent =
+        document.getElementById("hero-nota").textContent =
 
-        destaque.vote_average
+            destaque.vote_average
 
-        ? "⭐ " + destaque.vote_average.toFixed(1)
+            ? "⭐ " + destaque.vote_average.toFixed(1)
 
-        : "";
+            : "";
 
-    /* Gêneros */
+        const detalhes = await api(`/${heroTipo}/${heroId}`);
 
-    const detalhes = await api(`/${heroTipo}/${heroId}`);
+        document.getElementById("hero-genero").textContent =
 
-    document.getElementById("hero-genero").textContent =
+            detalhes.genres
 
-        detalhes.genres
+            ? detalhes.genres.map(g=>g.name).join(" • ")
 
-        ? detalhes.genres.map(g=>g.name).join(" • ")
+            : "";
 
-        : "";
+        hero.style.opacity = "1";
+
+    },300);
 
 }
+
+#hero{
+
+    transition:opacity .5s ease;
+
+}
+transition: opacity .5s ease;
 
 /* ==========================================
    HERO CLICK
