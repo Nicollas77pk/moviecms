@@ -27,53 +27,105 @@
 
 <body>
 
-    <!-- HEADER -->
+        <!-- HEADER -->
 
-    <header class="header">
+  <header class="header">
 
-        <div class="container">
+    <div class="container">
 
-            <a href="../index.html" class="logo">
+        <!-- LOGO -->
 
-                MultiTela
+        <a href="/multitela/index.html" class="logo">
+
+            <img
+                src="/multitela/imagens/multitela.png"
+                alt="MultiTela">
+
+        </a>
+
+        <!-- MENU MOBILE -->
+
+        <button
+            class="menu-toggle"
+            id="menuToggle">
+
+            ☰
+
+        </button>
+
+        <!-- MENU -->
+
+        <nav
+            class="menu"
+            id="menu">
+
+            <a href="/multitela/paginas/filmes.html">
+
+                Filmes
 
             </a>
 
-            <nav class="menu">
+            <a href="/multitela/paginas/series.html">
 
-                <a href="filmes.html">Filmes</a>
+                Séries
 
-                <a href="series.html">Séries</a>
+            </a>
 
-                <a href="animes.html">Animes</a>
+            <a href="/multitela/paginas/animes.html">
 
-                <a href="doramas.html">Doramas</a>
+                Animes
 
-                <a href="novelas.html">Novelas</a>
+            </a>
 
-                <a href="documentarios.html">Documentários</a>
+            <a href="/multitela/paginas/doramas.html">
 
-            </nav>
+                Doramas
 
-            <div class="header-right">
+            </a>
 
-                <input
-                    id="campoBusca"
-                    type="text"
-                    placeholder="Buscar filmes ou séries...">
+            <a href="/multitela/paginas/novelas.html">
 
-                <button id="btnBusca">
+                Novelas
 
-                    🔍
+            </a>
 
-                </button>
+            <a href="/multitela/paginas/documentarios.html">
 
-            </div>
+                Documentários
+
+            </a>
+
+        </nav>
+
+        <!-- BUSCA -->
+
+        <div class="header-search">
+
+            <input
+
+                id="campoBusca"
+
+                type="search"
+
+                autocomplete="off"
+
+                placeholder="Buscar filmes, séries, animes...">
+
+            <button
+
+                id="btnBusca">
+
+                🔍
+
+            </button>
+
+            <div id="autocompleteBusca"></div>
 
         </div>
 
-    </header>
+    </div>
 
+</header>
     <!-- RESULTADOS -->
 
     <section class="container secao">
