@@ -1,23 +1,62 @@
+/* ==========================================
+   MENU MOBILE
+========================================== */
+
 const menu = document.getElementById("menu");
 const menuToggle = document.getElementById("menuToggle");
+const overlay = document.getElementById("menuOverlay");
+
+function fecharMenu() {
+
+    if (!menu || !menuToggle) return;
+
+    menu.classList.remove("ativo");
+
+    if (overlay) {
+
+        overlay.classList.remove("ativo");
+
+    }
+
+    menuToggle.innerHTML = "☰";
+
+    menuToggle.setAttribute(
+        "aria-label",
+        "Abrir menu"
+    );
+
+}
+
+function abrirMenu() {
+
+    menu.classList.add("ativo");
+
+    if (overlay) {
+
+        overlay.classList.add("ativo");
+
+    }
+
+    menuToggle.innerHTML = "✕";
+
+    menuToggle.setAttribute(
+        "aria-label",
+        "Fechar menu"
+    );
+
+}
 
 if (menu && menuToggle) {
 
-    menuToggle.addEventListener("click", () => {
-
-        menu.classList.toggle("ativo");
+    menuToggle.addEventListener("click", function () {
 
         if (menu.classList.contains("ativo")) {
 
-            menuToggle.innerHTML = "✕";
-
-            menuToggle.setAttribute("aria-label", "Fechar menu");
+            fecharMenu();
 
         } else {
 
-            menuToggle.innerHTML = "☰";
-
-            menuToggle.setAttribute("aria-label", "Abrir menu");
+            abrirMenu();
 
         }
 
@@ -25,82 +64,98 @@ if (menu && menuToggle) {
 
 }
 
-/* Fecha ao clicar em um link */
+/* ==========================================
+   FECHA AO CLICAR EM UM LINK
+========================================== */
 
 document.querySelectorAll(".menu a").forEach(link => {
 
-    link.addEventListener("click", () => {
-
-        menu.classList.remove("ativo");
-
-        menuToggle.innerHTML = "☰";
-
-    });
+    link.addEventListener("click", fecharMenu);
 
 });
 
-/* Fecha clicando fora */
+/* ==========================================
+   FECHA AO CLICAR NO OVERLAY
+========================================== */
 
-document.addEventListener("click", e => {
+if (overlay) {
 
-    if (
+    overlay.addEventListener("click", fecharMenu);
 
-        menu.classList.contains("ativo") &&
+}
 
-        !menu.contains(e.target) &&
+/* ==========================================
+   FECHA COM ESC
+========================================== */
 
-        !menuToggle.contains(e.target)
+document.addEventListener("keydown", function (e) {
 
-    ) {
+    if (e.key === "Escape") {
 
-        menu.classList.remove("ativo");
+        fecharMenu();
 
-        menuToggle.innerHTML = "☰";
+        fecharDropdown();
 
     }
 
 });
 
-/* Fecha ao voltar para desktop */
+/* ==========================================
+   VOLTAR PARA DESKTOP
+========================================== */
 
-window.addEventListener("resize", () => {
+window.addEventListener("resize", function () {
 
     if (window.innerWidth > 768) {
 
-        menu.classList.remove("ativo");
-
-        menuToggle.innerHTML = "☰";
+        fecharMenu();
 
     }
 
 });
 
 
-/* ===========================
-   MENU MAIS
-=========================== */
+/* ==========================================
+   DROPDOWN CATEGORIAS
+========================================== */
 
+const dropdown = document.querySelector(".menu-dropdown");
 const btnMais = document.getElementById("btnMais");
-
 const submenu = document.getElementById("submenu");
 
-if(btnMais){
+function fecharDropdown() {
 
-    btnMais.addEventListener("click",function(e){
+    if (dropdown) {
+
+        dropdown.classList.remove("aberto");
+
+    }
+
+}
+
+if (btnMais && dropdown) {
+
+    btnMais.addEventListener("click", function (e) {
 
         e.stopPropagation();
 
-        submenu.classList.toggle("ativo");
+        dropdown.classList.toggle("aberto");
 
     });
 
 }
 
-document.addEventListener("click",function(){
+/* ==========================================
+   FECHA DROPDOWN AO CLICAR FORA
+========================================== */
 
-    if(submenu){
+document.addEventListener("click", function (e) {
 
-        submenu.classList.remove("ativo");
+    if (!dropdown) return;
+
+    if (!dropdown.contains(e.target)) {
+
+        fecharDropdown();
 
     }
 
