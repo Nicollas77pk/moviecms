@@ -73,9 +73,27 @@
 
     margin-left:20px;
 
+    flex:1;
+
+    overflow-x:auto;
+
+    overflow-y:hidden;
+
+    white-space:nowrap;
+
+    scrollbar-width:none;
+
+}
+
+.menu::-webkit-scrollbar{
+
+    display:none;
+
 }
 
 .menu a{
+
+    flex-shrink:0;
 
     color:#fff;
 
