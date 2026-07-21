@@ -74,3 +74,34 @@ window.addEventListener("resize", () => {
     }
 
 });
+
+
+/* ===========================
+   MENU MAIS
+=========================== */
+
+const btnMais = document.getElementById("btnMais");
+
+const submenu = document.getElementById("submenu");
+
+if(btnMais){
+
+    btnMais.addEventListener("click",function(e){
+
+        e.stopPropagation();
+
+        submenu.classList.toggle("ativo");
+
+    });
+
+}
+
+document.addEventListener("click",function(){
+
+    if(submenu){
+
+        submenu.classList.remove("ativo");
+
+    }
+
+});
