@@ -108,9 +108,9 @@
 
 .header-search{
 
-    width:320px;
+    width:220px;
 
-    min-width:320px;
+    min-width:220px;
 
     margin-left:auto;
 
@@ -122,9 +122,9 @@
 
 #campoBusca{
 
-    width:100%;
+    width:90%;
 
-    height:46px;
+    height:40px;
 
     border:none;
 
@@ -136,7 +136,7 @@
 
     border-radius:30px;
 
-    padding:0 58px 0 20px;
+    padding:0 53px 0 15px;
 
     font-size:15px;
 
