@@ -12,9 +12,13 @@ function abrirMenu() {
 
     overlay?.classList.add("ativo");
 
+    document.body.style.overflow = "hidden";
+
+    menu.scrollTop = 0;
+
     menuToggle.innerHTML = "✕";
 
-    menuToggle.setAttribute("aria-label", "Fechar menu");
+    menuToggle.setAttribute("aria-label","Fechar menu");
 
 }
 
@@ -24,12 +28,13 @@ function fecharMenu() {
 
     overlay?.classList.remove("ativo");
 
+    document.body.style.overflow = "";
+
     menuToggle.innerHTML = "☰";
 
-    menuToggle.setAttribute("aria-label", "Abrir menu");
+    menuToggle.setAttribute("aria-label","Abrir menu");
 
 }
-
 if(menu && menuToggle){
 
     menuToggle.addEventListener("click", function(e){
