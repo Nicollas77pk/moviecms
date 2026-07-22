@@ -389,3 +389,38 @@ transition:opacity .5s ease;
     margin-bottom:18px;
 
 }
+.seo-links{
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:12px;
+
+    margin-top:30px;
+
+}
+
+.seo-links a{
+
+    color:#00b8a6;
+
+    text-decoration:none;
+
+    padding:10px 18px;
+
+    border:1px solid #00b8a6;
+
+    border-radius:30px;
+
+    transition:.3s;
+
+}
+
+.seo-links a:hover{
+
+    background:#00b8a6;
+
+    color:#fff;
+
+}
