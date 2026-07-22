@@ -349,3 +349,43 @@ transition:opacity .5s ease;
     }
 
 }
+
+.seo-home{
+
+    margin:80px auto;
+
+    max-width:1100px;
+
+    line-height:1.9;
+
+    color:#cfcfcf;
+
+}
+
+.seo-home h2{
+
+    font-size:34px;
+
+    margin-bottom:20px;
+
+    color:#fff;
+
+}
+
+.seo-home h3{
+
+    margin-top:35px;
+
+    margin-bottom:15px;
+
+    font-size:24px;
+
+    color:#fff;
+
+}
+
+.seo-home p{
+
+    margin-bottom:18px;
+
+}
